@@ -24,7 +24,7 @@ param(
     [string] $Name,
 
     # UUID: A universally unique identifier for the mod
-    # TODO: Add UUID Validation - using regex?
+    [ValidatePattern('^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$')]
     [string] $UUID = ((New-Guid).ToString()),
 
     # The description of the mod
