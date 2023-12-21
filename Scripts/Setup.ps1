@@ -13,6 +13,9 @@
 .EXAMPLE
     . .\Scripts\Setup.ps1 -Name MyMod -UUID ((New-Guid).ToString())
     Run the script specifying both the ModName and the ModUUID
+.EXAMPLE
+    . .\Scripts\Setup.ps1 -Name MyMod -Author Shresht7 -Tags "spell;balance;class;combat"
+    Run the script specifying the ModName, AuthorName and the ModTags
 #>
 param(
     # Name of the Mod. Please use an unique identifier like PREFIX_ModName (e.g. S7_Config)
