@@ -24,11 +24,34 @@ param(
     [string] $UUID = ((New-Guid).ToString())
 )
 
-# Rename all placeholder files and directories. That is items with [ModName] and [ModUUID] placeholders.
+# Placeholder values and their replacements
+$Placeholders = @(
+    @("_____MODNAME_____", $Name),
+    @("_____MODUUID_____", $UUID)
+)
+
 Get-ChildItem -Recurse | ForEach-Object {
+    
+    # Rename all placeholder files and directories. That is items with [ModName] and [ModUUID] placeholders.
     if ($_.BaseName.EndsWith("[ModName]") -or $_.BaseName.EndsWith("[ModUUID]")) {
         $NewName = $_.FullName.Replace("[ModName]", $Name).Replace("[ModUUID]", $UUID)
-        Rename-Item -Path $_.FullName -NewName $NewName.Split("\")[-1] -Force
         Write-Verbose "Renaming $($_.FullName.Split($PWD)[-1]) to $($NewName.Split($PWD)[-1])"
+        Rename-Item -Path $_.FullName -NewName $NewName.Split("\")[-1] -Force
     }
+
+    # Replace placeholders in the file-contents
+    if (Test-Path -Path $_.FullName -PathType Leaf) {
+        $content = [System.IO.File]::ReadAllText($_.FullName)
+        foreach ($X in $Placeholders) {
+            $content = $content.Replace($X[0], $X[1])
+        }
+        $null = [System.IO.File]::WriteAllText($_.FullName, $content)
+    }
+
+    # Remove all .gitkeep files
+    Write-Verbose "Removing .gitkeep files"
+    if ($_.FullName.EndsWith(".gitkeep")) {
+        Remove-Item -Path $_.FullName -Force
+    }
+
 }
