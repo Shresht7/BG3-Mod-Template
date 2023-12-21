@@ -48,9 +48,9 @@ $Placeholders = @(
 
 Get-ChildItem -Recurse | ForEach-Object {
     
-    # Rename all placeholder files and directories. That is items with [ModName] and [ModUUID] placeholders.
-    if ($_.BaseName.EndsWith("[ModName]") -or $_.BaseName.EndsWith("[ModUUID]")) {
-        $NewName = $_.FullName.Replace("[ModName]", $Name).Replace("[ModUUID]", $UUID)
+    # Rename all placeholder files and directories. That is items with _____MODNAME_____ and _____MODUUID_____ placeholders.
+    if ($_.BaseName.EndsWith("_____MODNAME_____") -or $_.BaseName.EndsWith("_____MODUUID_____")) {
+        $NewName = $_.FullName.Replace("_____MODNAME_____", $Name).Replace("_____MODUUID_____", $UUID)
         Write-Verbose "Renaming $($_.FullName.Split($PWD)[-1]) to $($NewName.Split($PWD)[-1])"
         Rename-Item -Path $_.FullName -NewName $NewName.Split("\")[-1] -Force
     }

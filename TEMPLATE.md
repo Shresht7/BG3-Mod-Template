@@ -27,9 +27,9 @@ The one thing you should look at here is the `Lua.workspace.library` field in th
 
 The template, naturally, contains placeholder values. You'll want to deal with them as soon as possible.
 
-1. Rename the project root `[ModName]` to whatever you want the name of the project to be.
+1. Rename the project root `_____MODNAME_____` to whatever you want the name of the project to be.
 
-2. Rename `[ModName]_[ModUUID]` folder in the `Mods` directory with the appropriate values.
+2. Rename `_____MODNAME___________MODUUID_____` folder in the `Mods` directory with the appropriate values.
 
 3. Perform a regex search for `_{5}\w+?_{5}` to list all the placeholders across the workspace. Replace these placeholders with the values relevant to you.
 

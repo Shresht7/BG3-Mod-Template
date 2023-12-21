@@ -1,6 +1,6 @@
 {
     "RequiredVersion": 1,
-    "ModTable": "[ModName]_[ModUUID]",
+    "ModTable": "_____MODNAME___________MODUUID_____",
     "FeatureFlags": [
         "Lua"
     ]
