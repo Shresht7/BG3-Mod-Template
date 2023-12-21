@@ -31,7 +31,7 @@ The template, naturally, contains placeholder values. You'll want to deal with t
 
 2. Rename `[ModName]_[ModUUID]` folder in the `Mods` directory with the appropriate values.
 
-3. Perform a regex search for `_{5}\w+_{5}` to list all the placeholders across the workspace. Replace these placeholders with the values relevant to you.
+3. Perform a regex search for `_{5}\w+?_{5}` to list all the placeholders across the workspace. Replace these placeholders with the values relevant to you.
 
 > **NOTE**: If your project does not need a particular folder, you can probably delete it. (e.g. the `Public` directory)
 
