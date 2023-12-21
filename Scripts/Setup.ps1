@@ -20,14 +20,27 @@ param(
     [ValidateNotNullOrEmpty()]
     [string] $Name,
 
-    # UUID for the Mod.
-    [string] $UUID = ((New-Guid).ToString())
+    # UUID: A universally unique identifier for the mod
+    # TODO: Add UUID Validation - using regex?
+    [string] $UUID = ((New-Guid).ToString()),
+
+    # The description of the mod
+    [string] $Description,
+
+    # A string of tags/keywords describing the mod (delimited by a semi-colon)
+    [string] $Tags,
+
+    # Name of the mod author
+    [string] $Author
 )
 
 # Placeholder values and their replacements
 $Placeholders = @(
     @("_____MODNAME_____", $Name),
-    @("_____MODUUID_____", $UUID)
+    @("_____MODUUID_____", $UUID),
+    @("_____DESCRIPTION_____", $Description),
+    @("_____TAGS_____", $Tags),
+    @("_____AUTHOR_____", $Author)
 )
 
 Get-ChildItem -Recurse | ForEach-Object {
@@ -43,7 +56,10 @@ Get-ChildItem -Recurse | ForEach-Object {
     if (Test-Path -Path $_.FullName -PathType Leaf) {
         $content = [System.IO.File]::ReadAllText($_.FullName)
         foreach ($X in $Placeholders) {
-            $content = $content.Replace($X[0], $X[1])
+            if ($X[1]) {
+                # If the placeholder actually has a value to substitute ...
+                $content = $content.Replace($X[0], $X[1])
+            }
         }
         $null = [System.IO.File]::WriteAllText($_.FullName, $content)
     }

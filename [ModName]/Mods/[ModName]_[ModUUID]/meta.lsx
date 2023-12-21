@@ -34,7 +34,7 @@
                     <attribute id="MainMenuBackgroundVideo" type="FixedString" value=""/>
                     <attribute id="MenuLevelName" type="FixedString" value=""/>
 
-                    <!-- Name: Name of the the mod -->
+                    <!-- Name: Name of the Mod. Please use an unique identifier like PREFIX_ModName (e.g. S7_Config) -->
                     <attribute id="Name" type="FixedString" value="_____MODNAME_____"/>
 
                     <attribute id="NumPlayers" type="uint8" value="4"/>
