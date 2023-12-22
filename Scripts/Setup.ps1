@@ -46,6 +46,7 @@ $Placeholders = @(
     @("_____AUTHOR_____", $Author)
 )
 
+# Iterate over every file and directory in this workspace
 Get-ChildItem -Recurse | ForEach-Object {
     
     # Rename all placeholder files and directories. That is items with _____MODNAME_____ and _____MODUUID_____ placeholders.
@@ -74,3 +75,6 @@ Get-ChildItem -Recurse | ForEach-Object {
     }
 
 }
+
+# Success Message
+Write-Host "✅ Successfully setup the mod workspace!"
