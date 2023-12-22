@@ -1,8 +1,6 @@
 # BG3 Mod Template
 
-This is a template repository for a mod for **[Baldur's Gate 3]** by **[Larian Studios]**.
-
-<!-- TODO: Write an introduction describing this mod's purpose -->
+This is a template repository for a mod for **[Baldur's Gate 3]** by **[Larian Studios]**. Read [TEMPLATE.md](./TEMPLATE.md) for more details.
 
 ## 📦 Installation
 

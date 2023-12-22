@@ -1,6 +1,7 @@
 # How to use the Template
 
 - [How to use the Template](#how-to-use-the-template)
+  - [Setup Script](#setup-script)
   - [`.vscode`](#vscode)
   - [Placeholders](#placeholders)
   - [`meta.lsx`](#metalsx)
@@ -8,6 +9,28 @@
   - [`README.md`](#readmemd)
   - [License](#license)
 
+## Setup Script
+
+`Scripts/Setup.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process. The script (and the folder itself) can be removed once it is no longer needed.
+
+The script will:
+1. Rename all placeholder files and directories to whatever you specify.
+2. Substitute the placeholder values in the file-contents.
+3. Remove unneeded files (like `.gitkeep`).
+
+To run the script, enter the following command in a PowerShell console:
+
+```pwsh
+. .\Scripts\Setup.sp1
+```
+
+You can specify parameters like so:
+
+```pwsh
+. .\Scripts\Setup.ps1 -Name MyMod -Author Shresht7 -UUID (New-Guid)
+```
+
+> NOTE: Like any other script, **read it before you run it**.
 
 ## `.vscode`
 
