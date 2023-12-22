@@ -1,1 +1,1 @@
-_P("Hello from Server")
+Ext.Utils.Print("Hello from Server")
