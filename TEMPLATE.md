@@ -43,8 +43,6 @@ The `meta.lsx` is a very important file that contains the metadata information a
 
 `.gitkeep` is a special file that tells git to track even empty directories. You can safely **remove** these (and the empty directories) if you wish.
 
-<!-- TODO: Create a script to bootstrap the template and clean unneeded files -->
-
 ## `README.md`
 
 This is the heart and soul of your project's documentation. Use this file to describe what the project is about, how to make use of it and any other relevant information.
