@@ -21,7 +21,7 @@ The script will:
 To run the script, enter the following command in a PowerShell console:
 
 ```pwsh
-. .\Scripts\Setup.sp1
+. .\Scripts\Setup.ps1
 ```
 
 You can specify parameters like so:
