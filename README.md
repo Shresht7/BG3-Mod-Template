@@ -2,6 +2,22 @@
 
 This is a template repository for a mod for **[Baldur's Gate 3]** by **[Larian Studios]**. Read [TEMPLATE.md](./TEMPLATE.md) for more details.
 
+<!-- COVER-IMAGE -->
+
+## 📦 Releases
+
+- [~~Steam Workshop~~]()
+- [Nexus Mods]()
+- [GitHub]()
+
+## 🔗 Requirements
+
+- [Norbyte's Script Extender][Script-Extender]
+
+## 🚀 Features
+
+Write about the features of your mod.
+
 ## 📦 Installation
 
 ### [BG3 Mod Manager][BG3MM]
@@ -19,6 +35,7 @@ This is a template repository for a mod for **[Baldur's Gate 3]** by **[Larian S
 ## Acknowledgements
 
 - **[Larian Studios]** for creating **[Baldur's Gate 3]**.
+- **[Norbyte]** for the **[Script-Extender]**
 
 ## 📄 License
 
@@ -29,3 +46,5 @@ This project is licensed under the [MIT License](./LICENSE).
 [Baldur's Gate 3]: https://baldursgate3.game
 [Larian Studios]: http://larian.com
 [BG3MM]: https://github.com/LaughingLeader/BG3ModManager
+[Norbyte]: https://github.com/Norbyte
+[Script-Extender]: https://github.com/Norbyte/bg3se
