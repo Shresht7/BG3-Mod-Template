@@ -1,7 +1,9 @@
 # How to use the Template
 
 - [How to use the Template](#how-to-use-the-template)
-  - [Setup Script](#setup-script)
+  - [Scripts](#scripts)
+    - [`Setup`](#setup)
+    - [`Build`](#build)
   - [`.vscode`](#vscode)
   - [Placeholders](#placeholders)
   - [`meta.lsx`](#metalsx)
@@ -9,9 +11,15 @@
   - [`README.md`](#readmemd)
   - [License](#license)
 
-## Setup Script
+---
 
-`Scripts/Setup.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process. The script (and the folder itself) can be removed once it is no longer needed.
+## Scripts
+
+### `Setup`
+
+`Scripts/Setup.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process.
+
+> Note: The script (and the folder itself) can be removed once it is no longer needed.
 
 The script will:
 1. Rename all placeholder files and directories to whatever you specify.
@@ -32,9 +40,38 @@ You can specify parameters like so:
 
 > NOTE: Like any other script, **read it before you run it**.
 
+### `Build`
+
+The `Scripts/Build.ps1` script will build the mod `.pak` using the `divine.exe` cli from [lslib](https://github.com/Norbyte/lslib). The build artifacts will be put in the `Build` directory.
+
+> `NOTE`: This script expects the `divine.exe` to be in your Environment Path Variable.
+
+To run the `Build.ps1` script, enter the following in a PowerShell console:
+
+```pwsh
+. .\Build.ps1
+```
+
+> Note: To perform a dry-run, make use of the `-WhatIf` parameter
+> ```pwsh
+> . .\Scripts\Build.ps1 -WhatIf
+> ```
+
+If you wish to archive the built `.pak`, you can pass in the `-Archive` switch. This will output a `.zip` file instead.
+
+```pwsh
+. .\Build.ps1 -Archive
+```
+
+> NOTE: Again, Like any other script, **read it before you run it**
+
 ## `.vscode`
 
 The template contains useful snippets and settings to aid your development process. You can tweak these settings as you like.
+
+A `Build Package` task has been pre-defined in `tasks.json` that runs the [`Build.ps1`](#build) script. [Note: this needs `divine.exe` ([lslib](https://github.com/Norbyte/lslib)) to be set in your Environment Path Variable]
+
+> Tip: `Ctrl` + `Shift` + `B` keybind will run the build task
 
 The one thing you should look at here is the `Lua.workspace.library` field in the `.vscode/settings.json` file. This should point at the directory containing the IDEHelpers. Change this to wherever you keep the IDEHelpers in your system. This will allow the lua extension to read the globals from those scripts and make them available in this workspace.
 
