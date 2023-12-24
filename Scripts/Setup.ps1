@@ -77,4 +77,5 @@ Get-ChildItem -Recurse | ForEach-Object {
 }
 
 # Success Message
-Write-Host "✅ Successfully setup the mod workspace!"
+Write-Host "✅ Successfully setup the mod workspace!" -NoNewline
+Write-Host " - You can delete this script (Scripts/Setup.ps1) as it is no longer needed!" -ForegroundColor "DarkGray"
