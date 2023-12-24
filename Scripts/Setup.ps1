@@ -17,15 +17,13 @@
     . .\Scripts\Setup.ps1 -Name MyMod -Author Shresht7 -Tags "spell;balance;class;combat"
     Run the script specifying the ModName, AuthorName and the ModTags
 #>
+[CmdletBinding(SupportsShouldProcess)]
 param(
     # Name of the Mod. Please use an unique identifier like PREFIX_ModName (e.g. S7_Config)
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
     [string] $Name,
 
     # UUID: A universally unique identifier for the mod
-    [ValidatePattern('^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$')]
-    [string] $UUID = ((New-Guid).ToString()),
+    [string] $UUID,
 
     # The description of the mod
     [string] $Description,
@@ -36,6 +34,46 @@ param(
     # Name of the mod author
     [string] $Author
 )
+
+if (!$Name) {
+    Write-Host "`nName of the Mod. Please use a unique identifier like PREFIX_ModName (e.g. S7_Config)"
+    $Name = Read-Host "Name"
+    if (!$Name) {
+        throw "A name is required for this process"
+    }
+}
+
+if (!$UUID) {
+    Write-Host "`nA Universally Unique Identifier (UUID) for the mod. Leave blank to auto-generate."
+    $UUID = Read-Host "UUID"
+    if (!$UUID) {
+        $UUID = ((New-Guid).ToString())
+    } 
+}
+
+if (!$Author) {
+    Write-Host "`nName of the mod author"
+    $Author = Read-Host "Author"
+    if (!$Author) {
+        $Author = "_____AUTHOR_____"
+    }
+}
+
+if (!$Description) {
+    Write-Host "`nDescription of the mod"
+    $Description = Read-Host "Description"
+    if (!$Description) {
+        $Description = "_____DESCRIPTION_____"
+    }
+}
+
+if (!$Tags) {
+    Write-Host "`nA string of tags/keywords describing the mod (delimited by a semi-colon)"
+    $Tags = Read-Host "Tags"
+    if (!$Tags) {
+        $Tags = "_____TAGS_____"
+    }
+}
 
 # Placeholder values and their replacements
 $Placeholders = @(
@@ -77,5 +115,5 @@ Get-ChildItem -Recurse | ForEach-Object {
 }
 
 # Success Message
-Write-Host "✅ Successfully setup the mod workspace!" -NoNewline
+Write-Host "`n`n✅ Successfully setup the mod workspace!" -NoNewline
 Write-Host " - You can delete this script (Scripts/Setup.ps1) as it is no longer needed!" -ForegroundColor "DarkGray"
