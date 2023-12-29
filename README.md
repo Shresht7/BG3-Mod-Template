@@ -32,7 +32,7 @@ Write about the features of your mod.
 
 ---
 
-## Acknowledgements
+## ⭐ Acknowledgements
 
 - **[Larian Studios]** for creating **[Baldur's Gate 3]**.
 - **[Norbyte]** for the **[Script-Extender]**
