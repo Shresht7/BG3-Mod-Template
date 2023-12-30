@@ -11,6 +11,9 @@
     Performs a dry-run without actually making any changes. This will tell you what changes
     the script will make
 .EXAMPLE
+    . .\Build.ps1 -Version Revision
+    Build the mod project and bumps the version (revision) number
+.EXAMPLE
     . .\Build.ps1 -Confirm
     Asks for your confirmation as it builds the mod project.
 .EXAMPLE
@@ -30,11 +33,17 @@ param(
     [string] $Destination = (Join-Path $PSScriptRoot ".." "Build"),
 
     # Switch to compress the .pak into an .zip archive
-    [switch] $Archive
+    [switch] $Archive,
+
+    # The kind of version update
+    [ValidateSet("Major", "Minor", "Revision", "Build", "None")]
+    [string] $Version = "Build"
 )
 
 # Import Helpers
-. .\Scripts\Helpers\Utils.ps1
+Get-ChildItem -Path .\Scripts\Helpers -Filter *.ps1 | ForEach-Object {
+    . $_.FullName
+}
 
 # Update the path to point to the root folder
 $Path = Get-ModRootFolder -Path $Path
@@ -61,6 +70,11 @@ Get-ChildItem "$Path/Public" -Filter *.lsx -File -Recurse | ForEach-Object {
     if ($PSCmdlet.ShouldProcess($_.FullName, "Create-Resource using divine.exe")) {
         divine --game bg3 --action convert-resource --source $_.FullName --destination $dest
     }
+}
+
+# Update Version Number
+if ($Version -ne "None") {
+    . $PSScriptRoot\Update-VersionNumber.ps1 -Kind $Version
 }
 
 # Build Package
