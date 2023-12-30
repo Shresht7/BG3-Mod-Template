@@ -17,7 +17,7 @@ param(
     [string] $Path = (Get-ChildItem -Path . -File -Recurse -Filter meta.lsx | Select-Object -First 1 -ExpandProperty FullName),
 
     # Select a particular attribute
-    [ValidateSet('Author', 'Name', 'Description', 'UUID', 'Folder', 'Version64', 'Tags')]
+    [ValidateSet('Author', 'Name', 'Description', 'UUID', 'Folder', 'Version', 'Version64', 'Tags')]
     [string] $Select
 )
 
