@@ -1,6 +1,7 @@
 function Convert-VersionNumber(
     # The string representation of the version number
     [Parameter(ParameterSetName = "Version")]
+    [ValidatePattern("^\d\.\d\.\d\.\d$")]
     [string] $Version = "1.0.0.0",
 
     # The long int version number
