@@ -57,7 +57,7 @@ if (!(Get-Command -Name divine.exe -ErrorAction SilentlyContinue)) {
 $ModName = $Path.BaseName
 
 # Build Localization Files
-Get-ChildItem "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach-Object {
+Get-ChildItem -Path "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach-Object {
     $dest = "$(Join-Path $_.DirectoryName $_.BaseName).loca"
     if ($PSCmdlet.ShouldProcess($_.FullName, "Create-Localization using divine.exe")) {
         divine --game bg3 --action convert-loca --source $_.FullName --destination $dest
@@ -65,7 +65,7 @@ Get-ChildItem "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach-Objec
 }
 
 # Build lsx files
-Get-ChildItem "$Path/Public" -Filter *.lsx -File -Recurse | ForEach-Object {
+Get-ChildItem -Path "$Path/Public" -Filter *.lsx -File -Recurse | ForEach-Object {
     $dest = "$(Join-Path $_.DirectoryName $_.BaseName).lsf"
     if ($PSCmdlet.ShouldProcess($_.FullName, "Create-Resource using divine.exe")) {
         divine --game bg3 --action convert-resource --source $_.FullName --destination $dest
