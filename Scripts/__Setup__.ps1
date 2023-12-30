@@ -5,16 +5,16 @@
     Performs the initial setup for the project workspace by renaming files and folders,
     removing unneeded files, and substituting placeholder values.
 .EXAMPLE
-    . .\Scripts\Setup.ps1
+    . .\Scripts\__Setup__.ps1
     Simply run the script. It will ask you for the ModName and generate the ModUUID automatically
 .EXAMPLE
-    . .\Scripts\Setup.ps1 -Name MyMod
+    . .\Scripts\__Setup__.ps1 -Name MyMod
     Run the script and specify the mod's name as `MyMod`. UUID will be auto-generated
 .EXAMPLE
-    . .\Scripts\Setup.ps1 -Name MyMod -UUID ((New-Guid).ToString())
+    . .\Scripts\__Setup__.ps1 -Name MyMod -UUID ((New-Guid).ToString())
     Run the script specifying both the ModName and the ModUUID
 .EXAMPLE
-    . .\Scripts\Setup.ps1 -Name MyMod -Author Shresht7 -Tags "spell;balance;class;combat"
+    . .\Scripts\__Setup__.ps1 -Name MyMod -Author Shresht7 -Tags "spell;balance;class;combat"
     Run the script specifying the ModName, AuthorName and the ModTags
 #>
 [CmdletBinding(SupportsShouldProcess)]
@@ -116,4 +116,4 @@ Get-ChildItem -Recurse | ForEach-Object {
 
 # Success Message
 Write-Host "`n`n✅ Successfully setup the mod workspace!" -NoNewline
-Write-Host " - You can delete this script (Scripts/Setup.ps1) as it is no longer needed!" -ForegroundColor "DarkGray"
+Write-Host " - You can delete this script (Scripts/__Setup__.ps1) as it is no longer needed!" -ForegroundColor "DarkGray"

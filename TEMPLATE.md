@@ -17,7 +17,7 @@
 
 ### `Setup`
 
-`Scripts/Setup.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process.
+`Scripts/__Setup__.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process.
 
 > Note: The script (and the folder itself) can be removed once it is no longer needed.
 
@@ -29,13 +29,13 @@ The script will:
 To run the script, enter the following command in a PowerShell console:
 
 ```pwsh
-. .\Scripts\Setup.ps1
+. .\Scripts\__Setup__.ps1
 ```
 
 You can specify parameters like so:
 
 ```pwsh
-. .\Scripts\Setup.ps1 -Name MyMod -Author Shresht7 -UUID (New-Guid)
+. .\Scripts\__Setup__.ps1 -Name MyMod -Author Shresht7 -UUID (New-Guid)
 ```
 
 > NOTE: Like any other script, **read it before you run it**.
