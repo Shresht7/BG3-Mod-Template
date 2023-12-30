@@ -20,11 +20,9 @@
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    # The root folder for the mod project
-    [ValidateNotNullOrEmpty()]
-    [ValidateScript({ Test-Path -Path $_ -PathType Container })]
-    [Alias("Name", "Root", "ModName", "ModFolder")]
-    [string] $Path = "_____MODNAME_____",
+    # Path to the `meta.lsx` file. If not specified, will try to find the `meta.lsx` file in the workspace
+    [ValidateScript({ (Test-Path -Path $_ -PathType Leaf) && ($_.EndsWith("meta.lsx")) })]
+    [string] $Path = (Get-ChildItem -Path . -File -Recurse -Depth 5 -Filter meta.lsx | Select-Object -First 1 -ExpandProperty FullName),
 
     # Path to the Build Output directory
     [ValidateScript({ Test-Path -Path $_.DirectoryName -PathType Container })]
@@ -34,6 +32,12 @@ param(
     # Switch to compress the .pak into an .zip archive
     [switch] $Archive
 )
+
+# Import Helpers
+. .\Scripts\Helpers\Utils.ps1
+
+# Update the path to point to the root folder
+$Path = Get-ModRootFolder -Path $Path
 
 # Check requirements
 if (!(Get-Command -Name divine.exe -ErrorAction SilentlyContinue)) {
