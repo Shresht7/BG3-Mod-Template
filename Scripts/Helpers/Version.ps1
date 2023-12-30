@@ -99,7 +99,11 @@ function Update-VersionNumber(
 
     # The kind of version bump
     [ValidateSet("Major", "Minor", "Revision", "Build")]
-    [string] $Kind
+    [string] $Kind,
+
+    # Return the version as
+    [ValidateSet("Version", "Version64")]
+    [string] $As
 ) {
 
     # Parse the version
@@ -136,6 +140,18 @@ function Update-VersionNumber(
     }
 
     # Return the updated version number
-    return $V
+    if (!$As) {
+        return $V
+    }
+    # Return the update version number as specified in $As
+    else {
+        $Str = "$($V.Major).$($V.Minor).$($V.Revision).$($V.Build)"
+        switch ($As) {
+            "Version" { $Str }
+            "Version64" { Convert-VersionNumber -Version $Str -AsString }
+        }
+    }
+
+
 
 }
