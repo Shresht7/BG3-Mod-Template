@@ -2,7 +2,12 @@
 .SYNOPSIS
     Builds the Mod Project
 .DESCRIPTION
-    Builds the Mod Project using `divine.exe` (lslib).
+    Builds the Mod Project using `divine.exe` (lslib). This includes building the
+    localization files, lsf files and bumping the version number.
+    Each execution of this script bumps the version (build) number - This behaviour can
+    be altered by passing the $Version parameter. $Version accept the kind of
+    version bump (i.e. `Major`, `Minor`, `Revision`, `Build` (Default)). You can also pass
+    `None` ignore version updates.
 .EXAMPLE
     . .\Build.ps1
     Builds the mod project and creates a `.pak` in the Build output directory
