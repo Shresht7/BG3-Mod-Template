@@ -51,7 +51,8 @@ Get-ChildItem -Path .\Scripts\Helpers -Filter *.ps1 | ForEach-Object {
 }
 
 # Update the path to point to the root folder
-$Path = Get-ModRootFolder -Path $Path
+$Root = Get-ModRootFolder -Path $Path
+$Path = $Root.FullName
 
 # Check requirements
 if (!(Get-Command -Name divine.exe -ErrorAction SilentlyContinue)) {
@@ -59,10 +60,10 @@ if (!(Get-Command -Name divine.exe -ErrorAction SilentlyContinue)) {
 }
 
 # Determine the ModName
-$ModName = $Path.BaseName
+$ModName = $Root.BaseName
 
 # Build Localization Files
-Get-ChildItem -Path "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach-Object {
+Get-ChildItem -Path "$ModName/Localization/" -Filter *.xml -File -Recurse | ForEach-Object {
     $dest = "$(Join-Path $_.DirectoryName $_.BaseName).loca"
     if ($PSCmdlet.ShouldProcess($_.FullName, "Create-Localization using divine.exe")) {
         divine --game bg3 --action convert-loca --source $_.FullName --destination $dest
@@ -70,7 +71,7 @@ Get-ChildItem -Path "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach
 }
 
 # Build lsx files
-Get-ChildItem -Path "$Path/Public" -Filter *.lsx -File -Recurse | ForEach-Object {
+Get-ChildItem -Path "$ModName/Public" -Filter *.lsx -File -Recurse | ForEach-Object {
     $dest = "$(Join-Path $_.DirectoryName $_.BaseName).lsf"
     if ($PSCmdlet.ShouldProcess($_.FullName, "Create-Resource using divine.exe")) {
         divine --game bg3 --action convert-resource --source $_.FullName --destination $dest
@@ -84,8 +85,8 @@ if ($Version -ne "None") {
 
 # Build Package
 $PakPath = Join-Path $Destination "$ModName.pak"
-if ($PSCmdlet.ShouldProcess($Path, "Create-Package using divine.exe")) {
-    divine --game bg3 --action create-package --source $Path --destination $PakPath
+if ($PSCmdlet.ShouldProcess($Root.FullName, "Create-Package using divine.exe")) {
+    divine --game bg3 --action create-package --source $Root.FullName --destination $PakPath
 }
 
 # Compress Archive, if the $Archive switch is set
