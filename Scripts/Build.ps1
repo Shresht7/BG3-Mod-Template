@@ -44,9 +44,8 @@ if (!(Get-Command -Name divine.exe -ErrorAction SilentlyContinue)) {
     throw "[FAIL] Could not find divine.exe (lslib). You may need to add divine.exe to your `$Env:PATH variable"
 }
 
-# Resolve the path and determine the ModName
-$Path = Resolve-Path -Path $Path
-$ModName = (Get-Item -Path $Path).BaseName
+# Determine the ModName
+$ModName = $Path.BaseName
 
 # Build Localization Files
 Get-ChildItem "$Path/Localization/" -Filter *.xml -File -Recurse | ForEach-Object {
