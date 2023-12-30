@@ -1,49 +1,71 @@
-function Resolve-VersionNumber(
-    # The string representation of the version number
-    [Parameter(ParameterSetName = "Version")]
-    [ValidatePattern("^\d\.\d\.\d\.\d$")]
-    [string] $Version = "1.0.0.0",
- 
-    # The long int version number
-    [Parameter(ParameterSetName = "Version64")]
-    [long] $Version64,
-
-    # Format the output as string
-    [switch] $AsString
-) {
-    # If the input is a Version64
-    if ($PSCmdlet.ParameterSetName -eq 'Version64') {
-        # Perform the conversion
-        $Major = $Version64 -shr 55
-        $Minor = ($Version64 -shr 47) -band 0xFF
-        $Revision = ($Version64 -shr 31) -band 0xFFFF
-        $Build = $Version64 -band 0x7FFFFFF 
-
-        # If the AsString switch is passed return as a string
-        if ($AsString) {
-            return "$Major.$Minor.$Revision.$Build"
-        }
-
-        # Return the output object
-        return [PSCustomObject]@{
-            Major    = $Major
-            Minor    = $Minor
-            Revision = $Revision
-            Build    = $Build
-        }
-    }
-    # Else if the input is a string version
-    else {
-        $Major, $Minor, $Revision, $Build = $Version.Split(".")
-        return [PSCustomObject]@{
-            Major    = [int] $Major
-            Minor    = [int] $Minor
-            Revision = [int] $Revision
-            Build    = [int] $Build
-        }
+<#
+.SYNOPSIS
+    Parses the UInt64 version number (e.g. 36028797018963968) as a powershell object
+.DESCRIPTION
+    Parses the UInt64 version number (e.g. 36028797018963968) as a powershell object.
+    This object contains the `Major`, `Minor`, `Revision` and `Build` fields
+    to represent the Version number.
+#>
+function parseVersion64([long] $Version64) {
+    return [PSCustomObject]@{
+        Major    = $Version64 -shr 55
+        Minor    = ($Version64 -shr 47) -band 0xFF
+        Revision = ($Version64 -shr 31) -band 0xFFFF
+        Build    = $Version64 -band 0x7FFFFFF
     }
 }
 
+<#
+.SYNOPSIS
+    Parses the string version number (e.g. 1.0.3.7) as a powershell object
+.DESCRIPTION
+    Parses the string version number (e.g. 1.0.3.7) as a powershell object.
+    This object contains the `Major`, `Minor`, `Revision` and `Build` fields
+    to represent the Version number.
+#>
+function parseVersion(
+    [ValidatePattern("^\d\.\d\.\d\.\d$")]
+    [string] $Version
+) {
+    $Major, $Minor, $Revision, $Build = $Version.Split(".")
+    return [PSCustomObject]@{
+        Major    = [int] $Major
+        Minor    = [int] $Minor
+        Revision = [int] $Revision
+        Build    = [int] $Build
+    }   
+}
+
+<#
+.SYNOPSIS
+    Converts the Version object to a string version number (e.g. 1.0.3.6)
+#>
+function toVersion([object] $V) {
+    return "$($V.Major).$($V.Minor).$($V.Revision).$($V.Build)"
+}
+
+<#
+.SYNOPSIS
+    Converts the Version object to a UInt64 version number (e.g. 36028797018963968)
+#>
+function toVersion64([object] $V) {
+    # Perform conversion
+    $Major = ([long] $V.Major -shl 55)
+    $Minor = ([long] $V.Minor -shl 47)
+    $Revision = ([long] $V.Revision -shl 31)
+    $Build = [long] $V.Build
+    # Calculate the Version64
+    return $Major + $Minor + $Revision + $Build
+}
+
+<#
+.SYNOPSIS
+    Converts the version number from one form to another
+.DESCRIPTION
+    Accepts the version number in either the string form (e.g. 1.0.2.4)
+    or the long-int form (e.g. 36028797018963968) and converts it to the other
+    form.
+#>
 function Convert-VersionNumber(
     # The string representation of the version number
     [Parameter(ParameterSetName = "Version")]
@@ -52,41 +74,30 @@ function Convert-VersionNumber(
 
     # The long int version number
     [Parameter(ParameterSetName = "Version64")]
-    [long] $Version64,
-
-    # Format the output as string
-    [switch] $AsString
+    [long] $Version64
 ) {
-
     # If the input is a Version64
     if ($PSCmdlet.ParameterSetName -eq "Version64") {
-        return Resolve-VersionNumber -Version64 $Version64 -AsString:$AsString
+        $V = parseVersion64($Version64)
+        return toVersion($V)
     }
     # Else if the input is a string version
     else {
-        # Parse the string version
-        $Major, $Minor, $Revision, $Build = $Version.Split(".")
-        $Major = ([long] $Major -shl 55)
-        $Minor = ([long] $Minor -shl 47)
-        $Revision = ([long] $Revision -shl 31)
-        $Build = [long] $Build
-
-        # Calculate the Version64
-        $Version64 = $Major + $Minor + $Revision + $Build
-
-        # If the AsString switch was passed return as a string
-        if ($AsString) {
-            return $Version64
-        }
-
-        # Return the output object
-        return [PSCustomObject]@{
-            Version64 = $Version64
-        }
+        $V = parseVersion($Version)
+        return toVersion64($V)
     }
-
 }
 
+<#
+.SYNOPSIS
+    Updates the version number by the specified kind.
+.DESCRIPTION
+    Bumps and updates the given version number by the specified kind.
+    The version can be provided as a string `1.0.0.0` or as a long int `36028797018963968`.
+    The kind must be one of type: `Major`, `Minor`, `Revision`, `Build`.
+    The updated version can be returned as an object, a string (e.g. 1.0.2.4) or a
+    long int (e.g. 36028797018963968)
+#>
 function Update-VersionNumber(
     # The string representation of the version number
     [Parameter(ParameterSetName = "Version")]
@@ -105,13 +116,12 @@ function Update-VersionNumber(
     [ValidateSet("Version", "Version64")]
     [string] $As
 ) {
-
     # Parse the version
     $V = if ($PSCmdlet.ParameterSetName -eq "Version64") {
-        Resolve-VersionNumber -Version64 $Version64
+        parseVersion64($Version64)
     }
     else {
-        Resolve-VersionNumber -Version $Version
+        parseVersion($Version)
     }
 
     # Perform the version bump
@@ -145,13 +155,9 @@ function Update-VersionNumber(
     }
     # Return the update version number as specified in $As
     else {
-        $Str = "$($V.Major).$($V.Minor).$($V.Revision).$($V.Build)"
         switch ($As) {
-            "Version" { $Str }
-            "Version64" { Convert-VersionNumber -Version $Str -AsString }
+            "Version" { return toVersion($V) }
+            "Version64" { return toVersion64($V) }
         }
     }
-
-
-
 }
