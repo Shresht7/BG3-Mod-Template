@@ -1,9 +1,9 @@
-function Convert-VersionNumber(
+function Resolve-VersionNumber(
     # The string representation of the version number
     [Parameter(ParameterSetName = "Version")]
     [ValidatePattern("^\d\.\d\.\d\.\d$")]
     [string] $Version = "1.0.0.0",
-
+ 
     # The long int version number
     [Parameter(ParameterSetName = "Version64")]
     [long] $Version64,
@@ -11,9 +11,8 @@ function Convert-VersionNumber(
     # Format the output as string
     [switch] $AsString
 ) {
-
     # If the input is a Version64
-    if ($PSCmdlet.ParameterSetName -eq "Version64") {
+    if ($PSCmdlet.ParameterSetName -eq 'Version64') {
         # Perform the conversion
         $Major = $Version64 -shr 55
         $Minor = ($Version64 -shr 47) -band 0xFF
@@ -32,6 +31,36 @@ function Convert-VersionNumber(
             Revision = $Revision
             Build    = $Build
         }
+    }
+    # Else if the input is a string version
+    else {
+        $Major, $Minor, $Revision, $Build = $Version.Split(".")
+        return [PSCustomObject]@{
+            Major    = [int] $Major
+            Minor    = [int] $Minor
+            Revision = [int] $Revision
+            Build    = [int] $Build
+        }
+    }
+}
+
+function Convert-VersionNumber(
+    # The string representation of the version number
+    [Parameter(ParameterSetName = "Version")]
+    [ValidatePattern("^\d\.\d\.\d\.\d$")]
+    [string] $Version = "1.0.0.0",
+
+    # The long int version number
+    [Parameter(ParameterSetName = "Version64")]
+    [long] $Version64,
+
+    # Format the output as string
+    [switch] $AsString
+) {
+
+    # If the input is a Version64
+    if ($PSCmdlet.ParameterSetName -eq "Version64") {
+        return Resolve-VersionNumber -Version64 $Version64 -AsString:$AsString
     }
     # Else if the input is a string version
     else {
@@ -55,5 +84,58 @@ function Convert-VersionNumber(
             Version64 = $Version64
         }
     }
+
+}
+
+function Update-VersionNumber(
+    # The string representation of the version number
+    [Parameter(ParameterSetName = "Version")]
+    [ValidatePattern("^\d\.\d\.\d\.\d$")]
+    [string] $Version = "1.0.0.0",
+
+    # The long int version number
+    [Parameter(ParameterSetName = "Version64")]
+    [long] $Version64,
+
+    # The kind of version bump
+    [ValidateSet("Major", "Minor", "Revision", "Build")]
+    [string] $Kind
+) {
+
+    # Parse the version
+    $V = if ($PSCmdlet.ParameterSetName -eq "Version64") {
+        Resolve-VersionNumber -Version64 $Version64
+    }
+    else {
+        Resolve-VersionNumber -Version $Version
+    }
+
+    # Perform the version bump
+    switch ($Kind) {
+        "Major" {
+            $V.Major++
+            $V.Minor = 0
+            $V.Revision = 0
+            $V.Build = 0
+        }
+
+        "Minor" {
+            $V.Minor++
+            $V.Revision = 0
+            $V.Build = 0
+        }
+
+        "Revision" {
+            $V.Revision++
+            $V.Build = 0
+        }
+
+        "Build" {
+            $V.Build++
+        }
+    }
+
+    # Return the updated version number
+    return $V
 
 }
