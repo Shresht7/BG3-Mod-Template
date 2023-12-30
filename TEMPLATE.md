@@ -1,25 +1,30 @@
 # How to use the Template
 
-- [How to use the Template](#how-to-use-the-template)
-  - [Scripts](#scripts)
-    - [`Setup`](#setup)
-    - [`Build`](#build)
-  - [`.vscode`](#vscode)
-  - [Placeholders](#placeholders)
-  - [`meta.lsx`](#metalsx)
-  - [`.gitkeep`](#gitkeep)
-  - [`README.md`](#readmemd)
-  - [License](#license)
+- [Scripts](#scripts)
+  - [`Setup`](#setup)
+  - [`Build`](#build)
+  - [`Update-VersionNumber`](#update-versionnumber)
+  - [`Get-Metadata`](#get-metadata)
+- [`.vscode`](#vscode)
+- [Placeholders](#placeholders)
+- [`meta.lsx`](#metalsx)
+- [`.gitkeep`](#gitkeep)
+- [`README.md`](#readmemd)
+- [License](#license)
 
 ---
 
 ## Scripts
 
+> [!IMPORTANT]
+> Please read the scripts for a more detailed breakdown of their functionality.
+
 ### `Setup`
 
 `Scripts/__Setup__.ps1` is a PowerShell script to automatically setup the mod workspace using this template by providing it the necessary information. You don't have to use it, but it can speed up the process.
 
-> Note: The script (and the folder itself) can be removed once it is no longer needed.
+> [!TIP]
+> The script (and the folder itself) can be removed once it is no longer needed.
 
 The script will:
 1. Rename all placeholder files and directories to whatever you specify.
@@ -38,13 +43,15 @@ You can specify parameters like so:
 . .\Scripts\__Setup__.ps1 -Name MyMod -Author Shresht7 -UUID (New-Guid)
 ```
 
-> NOTE: Like any other script, **read it before you run it**.
+> [!CAUTION]
+> Like any other script, **read it before you run it**.
 
 ### `Build`
 
 The `Scripts/Build.ps1` script will build the mod `.pak` using the `divine.exe` cli from [lslib](https://github.com/Norbyte/lslib). The build artifacts will be put in the `Build` directory.
 
-> `NOTE`: This script expects the `divine.exe` to be in your Environment Path Variable.
+> [!IMPORTANT]
+> This script expects the `divine.exe` to be in your Environment Path Variable.
 
 To run the `Build.ps1` script, enter the following in a PowerShell console:
 
@@ -52,7 +59,8 @@ To run the `Build.ps1` script, enter the following in a PowerShell console:
 . .\Build.ps1
 ```
 
-> Note: To perform a dry-run, make use of the `-WhatIf` parameter
+> [!TIP]
+> To perform a dry-run, make use of the `-WhatIf` parameter
 > ```pwsh
 > . .\Scripts\Build.ps1 -WhatIf
 > ```
@@ -63,7 +71,38 @@ If you wish to archive the built `.pak`, you can pass in the `-Archive` switch. 
 . .\Build.ps1 -Archive
 ```
 
-> NOTE: Again, Like any other script, **read it before you run it**
+> [!CAUTION]
+> Again, Like any other script, **read it before you run it**
+
+### `Update-VersionNumber`
+
+Updates the version number in the `meta.lsx` file
+
+```pwsh
+. .\Scripts\Update-VersionNumber.ps1
+# Bumps the version number build by 1. (1.0.0.0 --> 1.0.0.1)
+```
+```pwsh
+. .\Scripts\Update-VersionNumber.ps1 -Kind Minor
+# Bumps the minor version number by 1. (1.0.2.14 --> 1.1.0.0)
+```
+
+### `Get-Metadata`
+
+Returns the metadata from the `meta.lsx` file
+
+```pwsh
+. .\Scripts\Get-Metadata.ps1
+```
+
+> [!TIP]
+>  The $Select parameter can be used to only select the given attribute.
+>
+> ```pwsh
+> . .\Scripts\Get-Metadata.ps1 -Select UUID
+> # To get only the mod's UUID
+> ```
+
 
 ## `.vscode`
 
