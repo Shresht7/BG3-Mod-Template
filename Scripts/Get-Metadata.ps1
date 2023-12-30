@@ -21,6 +21,9 @@ param(
     [string] $Select
 )
 
+# Import Version Helper Functions
+. .\Scripts\Helpers\Version.ps1
+
 # Read the `meta.lsx` file
 $MetaXML = [xml](Get-Content -Path $Path)
 
@@ -33,6 +36,9 @@ $UUID = $MetaXML.SelectSingleNode("//node[@id='ModuleInfo']/attribute[@id='UUID'
 $Version64 = [UInt64] $MetaXML.SelectSingleNode("//node[@id='ModuleInfo']/attribute[@id='Version64']").Value
 $Tags = $MetaXML.SelectSingleNode("//node[@id='ModuleInfo']/attribute[@id='Tags']").Value
 
+# Calculate the string version
+$Version = Convert-VersionNumber -Version64 $Version64 -AsString
+
 # Return the parsed metadata
 $Metadata = [PSCustomObject]@{
     Author      = $Author
@@ -40,6 +46,7 @@ $Metadata = [PSCustomObject]@{
     Description = $Description
     UUID        = $UUID
     Folder      = $Folder
+    Version     = $Version
     Version64   = $Version64
     Tags        = $Tags
 }
